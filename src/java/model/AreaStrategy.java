@@ -10,5 +10,5 @@ package model;
  * @author mcendrowski
  */
 public interface AreaStrategy {
-    public abstract double area();
+    public abstract Double area();
 }

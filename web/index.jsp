@@ -34,6 +34,7 @@
        
         <h1> Rectangle </h1>
         <form id="rectangleForm2" name="rectangleForm" method="POST" action="CalculatorController" >
+             <input type="hidden" name="form" value="rectangle"/>
             <label> length: </label>            
             <input type='text' name='length' value=<%=length%> placeholder='input length'/> 
                    <p></p>
@@ -53,5 +54,45 @@
                     }
                 %>
                 </h1>
+                <hr/>
+           <%
+
+            // Object responseObj = request.getAttribute("myMsg");
+            // Object errObj = request.getAttribute("errorMsg");
+            Object circleArea = request.getAttribute("circleArea");
+            String radius = ""+(Double)request.getAttribute("radius");
+            if (radius==null || radius.equals("null")){
+                radius="''";
+            }
+           
+           
+            Object circleErrObj = request.getAttribute("circleErrorMsg");        
+
+        %>
+
+       
+        <h1> Circle </h1>
+        <form id="circleForm" name="circleForm" method="POST" action="CalculatorController" >
+             <input type="hidden" name="form" value="circle"/>
+            <label> radius: </label>            
+            <input type='text' name='radius' value=<%=radius%> placeholder='input radius'/> 
+                   <p></p>
+             
+            <input type="submit" name="submit" value="Calculate circle area"/>
+        </form>
+        <h1>Area of circle: 
+        
+                <%
+                    if (circleArea != null) {
+                        out.println(circleArea.toString());
+                    }
+                    if (errObj != null) {
+                        out.println(circleErrObj.toString());
+                    }
+                %>
+                </h1>
+                <hr/>           
+                
+                
                     </body>
                     </html>

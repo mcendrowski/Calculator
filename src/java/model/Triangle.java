@@ -92,7 +92,8 @@ public class Triangle implements AreaStrategy {
 
     @Override
     public double area() {
-        return Math.sqrt(this.semiperimeter() * (this.semiperimeter() - sideA) * (this.semiperimeter() - sideB) * (this.semiperimeter() - sideC));
+        double s = this.semiperimeter();
+        return Math.sqrt(s * (s - sideA) * (s - sideB) * (s - sideC));
     }
 
 }

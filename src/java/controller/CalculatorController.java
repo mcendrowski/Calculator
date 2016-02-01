@@ -15,7 +15,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.AreaStrategy;
 import model.CalculatorService;
+import model.Circle;
 import model.Rectangle;
 
 /**
@@ -24,7 +26,38 @@ import model.Rectangle;
  */
 @WebServlet(name = "CalculatorController", urlPatterns = {"/CalculatorController"})
 public class CalculatorController extends HttpServlet {
-private static final String RESULT_PAGE = "/index.jsp";
+
+    private static final String RESULT_PAGE = "/index.jsp";
+    private Double length;
+    private Double width;
+    private Double area;
+    private Double radius;
+    private Double circleArea;
+
+    public static String getRESULT_PAGE() {
+        return RESULT_PAGE;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public Double getWidth() {
+        return width;
+    }
+
+    public Double getArea() {
+        return area;
+    }
+
+    public Double getRadius() {
+        return radius;
+    }
+
+    public Double getCircleArea() {
+        return circleArea;
+    }
+
 //private static final String RESULT_PAGE = "/index.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,36 +65,80 @@ private static final String RESULT_PAGE = "/index.jsp";
      *
      * @param request servlet request
      * @param response servlet response
+     * @param formName
+     * @param areaStrategy
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+//    public CalculatorController(){
+//        super();
+////        Rectangle r = new Rectangle();
+////        CalculatorService calc = new CalculatorService();
+////        calc.setAreaObject(r);
+//    }
+    public void processRectangleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Double length = Double.parseDouble(request.getParameter("length"));
+        this.length = length;
+        Double width = Double.parseDouble(request.getParameter("width"));
+        this.width = width;
+        CalculatorService calc = new CalculatorService(new Rectangle(length, width));
+
+        this.area = calc.calculateArea();
+        String area = "" + this.area;
+
+        request.setAttribute("length", length);
+        request.setAttribute("width", width);
+        request.setAttribute("area", area);
+
+        request.setAttribute("radius", this.radius);
+         if (this.getCircleArea() == null) {
+            request.setAttribute("circleArea", "");
+        } else {
+            request.setAttribute("circleArea", "" + this.getCircleArea());
+        }    
+        
+
+        RequestDispatcher view
+                = request.getRequestDispatcher(RESULT_PAGE);
+        view.forward(request, response);
+    }
+
+    public void processCircleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Double radius = Double.parseDouble(request.getParameter("radius"));
+        this.radius = radius;
+        CalculatorService calc = new CalculatorService(new Circle(radius));
+        this.circleArea = calc.calculateArea();
+
+        request.setAttribute("radius", radius);
+
+        request.setAttribute("circleArea", "" + circleArea);
+
+        request.setAttribute("length", this.length);
+        request.setAttribute("width", this.width);
+        if (this.getArea() == null) {
+            request.setAttribute("area", "");
+        } else {
+            request.setAttribute("area", "" + this.getArea());
+        }
+
+        RequestDispatcher view
+                = request.getRequestDispatcher(RESULT_PAGE);
+        view.forward(request, response);
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        
-        try (PrintWriter out = response.getWriter()) {
-            Double length = Double.parseDouble(request.getParameter("length"));
-            Double width = Double.parseDouble(request.getParameter("width"));
-            CalculatorService calc = new CalculatorService(new Rectangle(length,width));
-            String area = ""+calc.calculateArea();
-            
-//            String responseMsg = "Hello " + name + ", isn't Java great!";
-//            Map<String,Object> requestMap = new HashMap<>();
-//            requestMap.put("myMsg", responseMsg);
-//            requestMap.put("length", length);
-//            requestMap.put("width", width);
-            
-//            request.setAttribute("myResponse",requestMap);
-            
-            
-            request.setAttribute("length", length);
-            request.setAttribute("width", width);
-            request.setAttribute("area", area);
 
-            RequestDispatcher view
-                    = request.getRequestDispatcher(RESULT_PAGE);
-            view.forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            if (request.getParameter("form").equals("rectangle")) {
+                processRectangleRequest(request, response);
+            } else if (request.getParameter("form").equals("circle")) {
+                processCircleRequest(request, response);
+            }
+
         } catch (Exception e) {
             request.setAttribute("errorMsg", e.getMessage());
         }

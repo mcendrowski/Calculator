@@ -10,32 +10,32 @@ package model;
  * @author mcendrowski
  */
 public class Circle implements AreaStrategy {
-    private double radius;
+    private Double radius;
     
 
     public Circle() {
     }
 
-    public Circle(double radius) {
+    public Circle(Double radius) {
         this.radius = radius;     
         
     }
 
-    public double getRadius() {
+    public Double getRadius() {
         return this.radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(Double radius) {
         this.radius = radius;
     }
 
    
-    public double area(double radius){
+    public double area(Double radius){
         return Math.PI*radius*radius;
     }
     
     @Override
-    public double area(){
+    public Double area(){
         return Math.PI*this.radius*this.radius;
     }
 

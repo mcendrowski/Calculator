@@ -42,7 +42,7 @@ public class Rectangle implements AreaStrategy {
     }
     
     @Override
-    public double area(){
+    public Double area(){
         return this.length*this.width;
     }
 
