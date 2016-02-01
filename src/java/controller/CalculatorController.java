@@ -7,6 +7,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +24,8 @@ import model.Rectangle;
  */
 @WebServlet(name = "CalculatorController", urlPatterns = {"/CalculatorController"})
 public class CalculatorController extends HttpServlet {
-private static final String RESULT_PAGE = "/calculatorResponse.jsp";
+private static final String RESULT_PAGE = "/index.jsp";
+//private static final String RESULT_PAGE = "/index.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,15 +39,25 @@ private static final String RESULT_PAGE = "/calculatorResponse.jsp";
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        System.out.println("THIS IS CALCULATOR CONTROLLER");
+        
         try (PrintWriter out = response.getWriter()) {
-            double length = Double.parseDouble(request.getParameter("length"));
-            double width = Double.parseDouble(request.getParameter("width"));
+            Double length = Double.parseDouble(request.getParameter("length"));
+            Double width = Double.parseDouble(request.getParameter("width"));
             CalculatorService calc = new CalculatorService(new Rectangle(length,width));
-            String responseMsg = ""+calc.calculateArea();
-            System.out.println(responseMsg);
+            String area = ""+calc.calculateArea();
+            
 //            String responseMsg = "Hello " + name + ", isn't Java great!";
-            request.setAttribute("myMsg", responseMsg);
+//            Map<String,Object> requestMap = new HashMap<>();
+//            requestMap.put("myMsg", responseMsg);
+//            requestMap.put("length", length);
+//            requestMap.put("width", width);
+            
+//            request.setAttribute("myResponse",requestMap);
+            
+            
+            request.setAttribute("length", length);
+            request.setAttribute("width", width);
+            request.setAttribute("area", area);
 
             RequestDispatcher view
                     = request.getRequestDispatcher(RESULT_PAGE);
