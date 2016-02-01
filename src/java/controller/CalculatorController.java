@@ -19,6 +19,7 @@ import model.AreaStrategy;
 import model.CalculatorService;
 import model.Circle;
 import model.Rectangle;
+import model.Triangle;
 
 /**
  *
@@ -33,6 +34,10 @@ public class CalculatorController extends HttpServlet {
     private Double area;
     private Double radius;
     private Double circleArea;
+    private Double sideA;
+    private Double sideB;
+    private Double sideC;
+    private Double triangleArea;
 
     public static String getRESULT_PAGE() {
         return RESULT_PAGE;
@@ -57,6 +62,23 @@ public class CalculatorController extends HttpServlet {
     public Double getCircleArea() {
         return circleArea;
     }
+
+    public Double getSideA() {
+        return sideA;
+    }
+
+    public Double getSideB() {
+        return sideB;
+    }
+
+    public Double getSideC() {
+        return sideC;
+    }
+
+    public Double getTriangleArea() {
+        return triangleArea;
+    }
+    
 
 //private static final String RESULT_PAGE = "/index.jsp";
     /**
@@ -96,7 +118,16 @@ public class CalculatorController extends HttpServlet {
             request.setAttribute("circleArea", "");
         } else {
             request.setAttribute("circleArea", "" + this.getCircleArea());
-        }    
+        } 
+         
+        request.setAttribute("sideA", this.sideA);
+        request.setAttribute("sideB", this.sideB);
+        request.setAttribute("sideC", this.sideC);
+        if (this.getTriangleArea() == null) {
+            request.setAttribute("triangleArea", "");
+        } else {
+            request.setAttribute("triangleArea", "" + this.getTriangleArea());
+        }
         
 
         RequestDispatcher view
@@ -122,6 +153,56 @@ public class CalculatorController extends HttpServlet {
         } else {
             request.setAttribute("area", "" + this.getArea());
         }
+        
+        request.setAttribute("sideA", this.sideA);
+        request.setAttribute("sideB", this.sideB);
+        request.setAttribute("sideC", this.sideC);
+        if (this.getTriangleArea() == null) {
+            request.setAttribute("triangleArea", "");
+        } else {
+            request.setAttribute("triangleArea", "" + this.getTriangleArea());
+        }
+
+        RequestDispatcher view
+                = request.getRequestDispatcher(RESULT_PAGE);
+        view.forward(request, response);
+    }
+    
+    public void processTriangleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        Double sideA = Double.parseDouble(request.getParameter("sideA"));
+        this.sideA = sideA;
+        Double sideB = Double.parseDouble(request.getParameter("sideB"));
+        this.sideB = sideB;
+        Double sideC = Double.parseDouble(request.getParameter("sideC"));
+        this.sideC = sideC;
+        CalculatorService calc = new CalculatorService(new Triangle(sideA,sideB,sideC));
+
+        this.triangleArea = calc.calculateArea();
+        String triangleArea = "" + this.triangleArea;
+
+        request.setAttribute("sideA", sideA);
+        request.setAttribute("sideB", sideB);
+        request.setAttribute("sideC", sideC);
+        request.setAttribute("triangleArea", ""+this.triangleArea);
+        
+        request.setAttribute("length", this.length);
+        request.setAttribute("width", this.width);
+        if (this.getArea() == null) {
+            request.setAttribute("area", "");
+        } else {
+            request.setAttribute("area", "" + this.getArea());
+        }
+
+        request.setAttribute("radius", this.radius);
+         if (this.getCircleArea() == null) {
+            request.setAttribute("circleArea", "");
+        } else {
+            request.setAttribute("circleArea", "" + this.getCircleArea());
+        }    
+         
+         
+        
 
         RequestDispatcher view
                 = request.getRequestDispatcher(RESULT_PAGE);
@@ -137,6 +218,8 @@ public class CalculatorController extends HttpServlet {
                 processRectangleRequest(request, response);
             } else if (request.getParameter("form").equals("circle")) {
                 processCircleRequest(request, response);
+            } else if (request.getParameter("form").equals("triangle")) {
+                processTriangleRequest(request, response);
             }
 
         } catch (Exception e) {

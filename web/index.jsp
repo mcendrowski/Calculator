@@ -91,7 +91,57 @@
                     }
                 %>
                 </h1>
-                <hr/>           
+                <hr/> 
+                
+                 <%
+
+            // Object responseObj = request.getAttribute("myMsg");
+            // Object errObj = request.getAttribute("errorMsg");
+            Object triangleArea = request.getAttribute("triangleArea");
+            String sideA = ""+(Double)request.getAttribute("sideA");
+            if (sideA==null || sideA.equals("null")){
+                sideA="''";
+            }
+            String sideB = ""+(Double)request.getAttribute("sideB");
+            if (sideB==null || sideB.equals("null")){
+                sideB="''";
+            }
+            String sideC = ""+(Double)request.getAttribute("sideC");
+            if (sideC==null || sideC.equals("null")){
+                sideC="''";
+            }
+           
+            Object triangleErrObj = request.getAttribute("triangleErrorMsg");        
+
+        %>
+
+       
+        <h1> Triangle </h1>
+        <form id="triangleForm" name="triangleForm" method="POST" action="CalculatorController" >
+             <input type="hidden" name="form" value="triangle"/>
+            <label> side A: </label>            
+            <input type='text' name='sideA' value=<%=sideA%> placeholder='input sideA'/> 
+                   <p></p>
+            <label> side B: </label>            
+            <input type='text' name='sideB' value=<%=sideB%> placeholder='input sideB'/> 
+                   <p></p> 
+            <label> side C: </label>            
+            <input type='text' name='sideC' value=<%=sideC%> placeholder='input sideC'/> 
+                   <p></p>
+            <input type="submit" name="submit" value="Calculate triangle area"/>
+        </form>
+        <h1>Area of triangle: 
+        
+                <%
+                    if (triangleArea != null) {
+                        out.println(triangleArea.toString());
+                    }
+                    if (triangleErrObj != null) {
+                        out.println(triangleErrObj.toString());
+                    }
+                %>
+                </h1>
+              
                 
                 
                     </body>
