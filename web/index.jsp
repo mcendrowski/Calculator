@@ -24,6 +24,7 @@
             // Object responseObj = request.getAttribute("myMsg");
             // Object errObj = request.getAttribute("errorMsg");
             Object area = request.getAttribute("area");
+
             String length = "" + (Double) request.getAttribute("length");
             if (length == null || length.equals("null")) {
                 length = "''";
@@ -136,6 +137,7 @@
         <h1>Area of triangle: 
 
             <%
+
                 if (triangleArea != null) {
                     out.println(triangleArea.toString());
                 }
@@ -146,34 +148,70 @@
         </h1>
         <h3> Parameter names :
             <%
-            for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
+                for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
 
-                out.println(e.nextElement());
+                    out.println(e.nextElement());
                 }
-             
-        %>
-            </h3>
-             <h3> Attribute names : 
-            <%
-           
-             for (Enumeration<String> e = request.getAttributeNames(); e.hasMoreElements();) {
 
-                out.println(e.nextElement());
-                }
-        %>
-            </h3>
-             <h3> Parameter values: 
-            <%
-           
-               for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
+            %>
+        </h3>
+        <h3> Attribute names : 
+            <%                for (Enumeration<String> e = request.getAttributeNames(); e.hasMoreElements();) {
 
-                
-                out.println(request.getParameter(e.nextElement()));
+                    out.println(e.nextElement());
                 }
-                
-                
-        %>
-            </h3>
+
+
+            %>
+        </h3>
+        <h3> Parameter values: 
+            <%                for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
+
+                    out.println(request.getParameter(e.nextElement()));
+                }
+
+
+            %>
+
+            <hr/>
+            <c:forEach var="item" items="${request.getParameterNames()}">
+               
+                <tr>
+
+                    ${getParameter(item.nextElement())}
+                    ${item.nextElement()}
+                    ${item}
+                    </td>
+                   
+                </c:forEach>
+
+
+
+        </h3>
+             <c:forEach var="item" items="${paramValues}">
+               
+               
+
+                    
+                    ${"item"}
+                                   
+                </c:forEach>
+
+
+
+        </h3>
+        <h3> 
+            ${paramValues.radius[0]}
+            ${radius}
+        
+        </h3>
+            
+            <h3> 
+            ${(radius>10)? "Radius bigger than 10":"Radius equals or less 10"}
+        
+        </h3>
+        
+        
 
 
 
